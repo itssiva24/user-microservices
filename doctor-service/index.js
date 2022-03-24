@@ -1,11 +1,14 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
+import connectMongo from "./db/connection.js";
 import setupRoutes from "./routes.js";
 
 const PORT = process.env.PORT || 7002
 
 const app = express();
+
+connectMongo();
 
 app.use(bodyParser.json());
 
