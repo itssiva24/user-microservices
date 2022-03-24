@@ -1,9 +1,11 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import session from "express-session";
+import dotenv from "dotenv"
 
-
-const PORT = accessEnv("PORT", 7000);
+dotenv.config()
+const PORT = process.env.PORT || 7000
 
 const app = express();
 
@@ -16,7 +18,15 @@ app.use(
   })
 );
 
-app.use(injectSession);
+app.use(session({
+  secret: process.env.EXPRESS_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+
+app.use("/patientAuth", require("./routes/patient.js"))
+app.use("/doctorAuth", require("./routes/doctor.js"))
 
 app.listen(PORT, () => {
   console.info(`API gateway listening on ${PORT}`);
